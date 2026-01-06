@@ -1,0 +1,635 @@
+:root {
+  /* Light mode colors */
+  --bg: #f5f7fa;
+  --panel: #ffffff;
+  --panel2: #f8f9fb;
+  --text: #1a1d2e;
+  --muted: #5a5f73;
+  --line: rgba(0, 0, 0, 0.1);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --radius: 16px;
+
+  /* Card sizing */
+  --portrait-w: 150px;
+  --gap: 14px;
+  --badge-w: 1;
+  --landscape-w: 2;
+}
+
+/* Dark mode colors */
+:root.dark {
+  --bg: #0b0d12;
+  --panel: #111522;
+  --panel2: #0f1320;
+  --text: #e7e9ee;
+  --muted: #aab0bd;
+  --line: rgba(255, 255, 255, 0.1);
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+}
+
+/* Auto dark mode based on system preference */
+@media (prefers-color-scheme: dark) {
+  :root:not(.light) {
+    --bg: #0b0d12;
+    --panel: #111522;
+    --panel2: #0f1320;
+    --text: #e7e9ee;
+    --muted: #aab0bd;
+    --line: rgba(255, 255, 255, 0.1);
+    --shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+    Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+  background: radial-gradient(
+    1200px 900px at 10% 10%,
+    color-mix(in srgb, var(--bg) 80%, var(--text) 8%),
+    var(--bg) 55%
+  );
+  color: var(--text);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#app {
+  height: 100%;
+}
+
+/* Light mode specific background */
+:root:not(.dark) body {
+  background: radial-gradient(
+    1200px 900px at 10% 10%,
+    #e8ecf2 0%,
+    var(--bg) 55%
+  );
+}
+
+/* Buttons */
+button,
+select,
+input[type="checkbox"] {
+  font: inherit;
+}
+
+.btn {
+  border: 1px solid var(--line);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--text);
+  padding: 8px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: transform 0.05s ease, background 0.15s ease;
+  font-size: inherit;
+}
+
+.btn:hover {
+  background: color-mix(in srgb, var(--text) 9%, transparent);
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+/* Pill component */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: var(--muted);
+  user-select: none;
+}
+
+.pill strong {
+  color: var(--text);
+  font-weight: 650;
+}
+
+/* Album shell */
+.album-shell {
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--text) 4%, transparent),
+    color-mix(in srgb, var(--text) 2%, transparent)
+  );
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.album-header {
+  padding: 14px 14px;
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: color-mix(in srgb, var(--bg) 88%, black);
+}
+
+.album-header .left {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+
+.album-name {
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.album-meta {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.album-body {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* Block (repeating card container) */
+.block {
+  background: color-mix(in srgb, var(--text) 2%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 6%, transparent);
+  border-radius: 18px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* Grid layout */
+.row-hero,
+.row-portraits {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--gap);
+}
+
+/* Card base */
+.card {
+  position: relative;
+  width: 100%;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  box-shadow: 0 12px 20px color-mix(in srgb, var(--bg) 82%, black);
+  cursor: pointer;
+  transition: transform 0.12s ease, border-color 0.12s ease,
+    background 0.12s ease;
+}
+
+.card:hover {
+  transform: translateY(-1px);
+  border-color: color-mix(in srgb, var(--text) 18%, transparent);
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+.card:focus-visible {
+  outline: 3px solid color-mix(in srgb, var(--text) 35%, transparent);
+  outline-offset: 2px;
+}
+
+/* Aspect ratios */
+.card.portrait {
+  aspect-ratio: 4 / 5;
+}
+
+.card.landscape {
+  grid-column: span 2;
+  aspect-ratio: calc(2 * 4 + 0.5) / 5;
+}
+
+.card.badge {
+  aspect-ratio: 4 / 5;
+}
+
+/* Card content */
+.card .img {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Image display - ensures proper aspect ratios */
+.card .img img {
+  display: block;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.card .frame {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: 16px;
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+/* Card label */
+.card .label {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
+  padding: 8px 10px;
+  border-radius: 12px;
+  background: color-mix(in srgb, var(--bg) 62%, black);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  backdrop-filter: blur(6px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  min-height: 34px;
+}
+
+.label .name {
+  font-size: 12px;
+  font-weight: 650;
+  letter-spacing: 0.15px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.label .type {
+  font-size: 11px;
+  color: color-mix(in srgb, var(--text) 75%, transparent);
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  flex: 0 0 auto;
+}
+
+/* Missing card state */
+.card.missing {
+  background: color-mix(in srgb, var(--text) 2%, transparent);
+  border-color: color-mix(in srgb, var(--text) 8%, transparent);
+  box-shadow: none;
+  cursor: default;
+}
+
+.card.missing:hover {
+  transform: none;
+}
+
+.card.missing .img {
+  background: linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--text) 6%, transparent),
+      color-mix(in srgb, var(--text) 1%, transparent)
+    ),
+    repeating-linear-gradient(
+      45deg,
+      color-mix(in srgb, var(--text) 5%, transparent) 0px,
+      color-mix(in srgb, var(--text) 5%, transparent) 8px,
+      color-mix(in srgb, var(--text) 2%, transparent) 8px,
+      color-mix(in srgb, var(--text) 2%, transparent) 16px
+    );
+  filter: saturate(0.6);
+}
+
+.silhouette {
+  position: absolute;
+  inset: 18px;
+  border-radius: 14px;
+  border: 1px dashed color-mix(in srgb, var(--text) 22%, transparent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: color-mix(in srgb, var(--text) 55%, transparent);
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  text-align: center;
+  padding: 10px;
+  pointer-events: none;
+}
+
+/* Badge foil effect - inspired by 1980s football sticker albums */
+.card.badge:not(.missing) .img {
+  background:
+    /* Metallic sheen highlights */
+    radial-gradient(
+      ellipse 800px 300px at 25% 15%,
+      rgba(255, 255, 255, 0.35),
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 600px 250px at 75% 85%,
+      rgba(255, 255, 255, 0.18),
+      transparent 50%
+    ),
+    /* Metallic base gradient */
+    linear-gradient(
+      125deg,
+      #c0c5ce 0%,
+      #e8edf4 25%,
+      #d4dae5 45%,
+      #f2f6fb 50%,
+      #d8dfe8 55%,
+      #e5ebf2 75%,
+      #c8cfd9 100%
+    ),
+    /* Subtle horizontal bands for brushed metal effect */
+    repeating-linear-gradient(
+      0deg,
+      transparent 0px,
+      rgba(255, 255, 255, 0.08) 1px,
+      transparent 2px,
+      transparent 4px
+    );
+  animation: foilShimmer 3.5s ease-in-out infinite;
+  position: relative;
+}
+
+/* Add a glossy overlay effect */
+.card.badge:not(.missing)::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(255, 255, 255, 0.15) 100%
+  );
+  pointer-events: none;
+  border-radius: 16px;
+  animation: foilGloss 4s ease-in-out infinite;
+}
+
+@keyframes foilShimmer {
+  0%, 100% {
+    filter: brightness(1.05) saturate(0.85) contrast(1.1);
+  }
+  50% {
+    filter: brightness(1.25) saturate(0.95) contrast(1.15);
+  }
+}
+
+@keyframes foilGloss {
+  0%, 100% {
+    opacity: 0.7;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+/* Landscape card effect */
+.card.landscape:not(.missing) .img {
+  background: radial-gradient(
+      700px 260px at 30% 25%,
+      color-mix(in srgb, var(--text) 18%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      540px 260px at 70% 80%,
+      color-mix(in srgb, var(--text) 10%, transparent),
+      transparent 64%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--text) 8%, transparent),
+      color-mix(in srgb, var(--text) 2%, transparent)
+    );
+}
+
+/* Portrait card effect */
+.card.portrait:not(.missing) .img {
+  background: radial-gradient(
+      520px 260px at 30% 18%,
+      color-mix(in srgb, var(--text) 16%, transparent),
+      transparent 62%
+    ),
+    radial-gradient(
+      460px 240px at 70% 76%,
+      color-mix(in srgb, var(--text) 9%, transparent),
+      transparent 65%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--text) 8%, transparent),
+      color-mix(in srgb, var(--text) 2%, transparent)
+    );
+}
+
+/* Duplicate badge */
+.dup {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 5px 8px;
+  border-radius: 999px;
+  font-size: 12px;
+  background: color-mix(in srgb, var(--bg) 55%, black);
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  color: color-mix(in srgb, var(--text) 92%, transparent);
+  display: none;
+}
+
+.card[data-dup]:not([data-dup="1"]) .dup {
+  display: inline-flex;
+}
+
+/* Label modes */
+.app[data-label-mode="none"] .label,
+.app[data-label-mode="none"] .dup {
+  display: none;
+}
+
+.app[data-label-mode="dupes"] .label {
+  display: none;
+}
+
+.app[data-label-mode="dupes"] .card[data-dup]:not([data-dup="1"]) .dup {
+  display: inline-flex;
+}
+
+.app[data-label-mode="full"] .label {
+  display: flex;
+}
+
+.app[data-label-mode="full"] .card[data-dup]:not([data-dup="1"]) .dup {
+  display: inline-flex;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: color-mix(in srgb, var(--bg) 40%, black);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 18px;
+  z-index: 50;
+}
+
+.modal-backdrop.open {
+  display: flex;
+}
+
+.modal {
+  width: min(720px, 100%);
+  background: color-mix(in srgb, var(--panel) 95%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  border-radius: 18px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.modal header {
+  margin: 0;
+  padding: 14px 14px;
+  border-bottom: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  background: color-mix(in srgb, var(--bg) 82%, black);
+}
+
+.modal h2 {
+  margin: 0;
+  font-size: 14px;
+  letter-spacing: 0.2px;
+}
+
+.close {
+  border: 1px solid color-mix(in srgb, var(--text) 14%, transparent);
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  color: var(--text);
+  border-radius: 12px;
+  padding: 8px 10px;
+  cursor: pointer;
+}
+
+.modal .content {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: 14px;
+  padding: 14px;
+}
+
+.modal .preview {
+  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--text) 12%, transparent);
+  background: color-mix(in srgb, var(--text) 5%, transparent);
+  height: 320px;
+  position: relative;
+  overflow: hidden;
+}
+
+.modal .preview .img {
+  position: absolute;
+  inset: 0;
+}
+
+.modal .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 0;
+}
+
+.kv {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--text) 6%, transparent);
+  border: 1px solid color-mix(in srgb, var(--text) 10%, transparent);
+  color: color-mix(in srgb, var(--text) 85%, transparent);
+}
+
+.desc {
+  color: color-mix(in srgb, var(--text) 86%, transparent);
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+
+.actions .btn {
+  background: color-mix(in srgb, var(--text) 7%, transparent);
+}
+
+/* Screen-reader-only */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Responsive breakpoints */
+@media (max-width: 700px) {
+  .modal .content {
+    grid-template-columns: 1fr;
+  }
+
+  .modal .preview {
+    height: 240px;
+  }
+}
+
+@media (max-width: 389px) {
+  .row-hero,
+  .row-portraits {
+    grid-template-columns: 1fr;
+  }
+
+  .card.landscape {
+    grid-column: span 1;
+    aspect-ratio: 16 / 10;
+  }
+}
